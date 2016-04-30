@@ -1,5 +1,6 @@
 function Link(value, next) {
-	this.value = value;
+	if(value === undefined) this.isHead = true;
+	this.value = (value === undefined? '__head__' : value);
 	this.next = next;
 }
 
@@ -12,7 +13,7 @@ Link.prototype.prepend = function (link) {
 
 Link.prototype.getLast = function() {
 	var last;
-	this.forEach((c) => {
+	this.forEachLink((c) => {
 		if(!c.next) last = c;
 	});
 	return last;
@@ -25,7 +26,7 @@ Link.prototype.append = function(link) {
 	return this;
 }
 
-Link.prototype.forEach = function(iterFunc) {
+Link.prototype.forEachLink = function(iterFunc) {
 	var prev = null;
 	var curr = this;
 	while(curr) {
@@ -35,22 +36,42 @@ Link.prototype.forEach = function(iterFunc) {
 	}
 }
 
+Link.prototype.copy = function() {
+	var curr = new Link();
+	var head = curr;
+	this.forEachLink(link=>{
+		curr.append(link.value);
+		curr = curr.next;
+	});
+	return head;
+};
+
+Link.prototype.addImmutably= function(otherLink) {
+	var head = this.copy();
+	head.getLast().next = otherLink;
+	return head;
+}
+
+
+Link.prototype.forEach = function(iterFunc) {
+	var prev = null;
+	var curr = this;
+	while(curr) {
+		if(!curr.isHead)
+			iterFunc(curr.value, prev? prev.value: null);
+		prev = curr;
+		curr = curr.next;
+	}
+}
+
 Link.prototype.contains = function(value) {
 	var flag = false;
 	this.forEach((curr, prev) => {
 		if(!flag) {
-			flag = curr.equals(value);
+			flag = curr === value;
 		}
 	});
 	return flag;
-}
-
-Link.prototype.equals = function (rhs) {
-	if(rhs instanceof Link) {
-		return wrapEquals(this.value, rhs.value);
-	} else {
-		return wrapEquals(this.value, rhs);
-	}
 }
 
 Link.prototype.size = function() {
@@ -58,18 +79,10 @@ Link.prototype.size = function() {
 }
 
 
-Link.prototype.toArray = function() {
+Link.prototype.values = function() {
 	var collect = [];
 	this.forEach((curr, prev) => {
 		collect.push(curr);
-	});
-	return collect;
-}
-
-Link.prototype.allValues = function() {
-	var collect = [];
-	this.forEach((c, p) => {
-		collect.push(c.value);
 	});
 	return collect;
 }

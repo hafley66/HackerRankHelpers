@@ -44,10 +44,11 @@ Object.prototype.sortKeys = function() {
 	})
 	return clone;
 }
-Object.prototype.forEach = function(iter) {
-	var keys = Object.keys(this);
+Object.forEach = function(obj, iter) {
+
+	var keys = Object.keys(obj);
 	keys.forEach(key=>{
-		iter(this[key], key, this);
+		iter(obj[key], key, obj);
 	});
 }
 

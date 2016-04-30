@@ -12,7 +12,7 @@ function getGraphDataFromInput(input) {
 	var lines = input.split('\n').map(line=>{
 		return line.trim().split(' ').map(Number);
 	});
-	var testCasesCount = lines.shift();
+	var testCasesCount = lines[0].length === 1? lines.shift() : undefined;
 	var graphs = [];
 	var start = 0;
 	lines.forEach((line, key)=>{
@@ -36,18 +36,11 @@ function startGraph(gph) {
 	var edges = gph.edges;
 	var graph = new Graph(range(gph.verticesCount), edges, {directed: false, baseWeight:6});
 	var source = gph.source;
-	var search = Dijkstra(graph, graph.getVertex(source));
+	var search = Prims(graph, graph.getVertex(source));
 
-	var vertices = graph.getAllVertices().map(v=>Number(v.key)).sort((L, R)=> L - R);
-	vertices.remove(source);
-	var out = [];
-	vertices.forEach( v => {
-		var dist = search.distances.get(graph.getVertex(v));
-		if(dist === Infinity) dist = -1;
-		// out.push('[' + v + ':' +dist +']');
-		out.push(dist);
-
+	var sum = 0;
+	[...search.parents.values()].forEach(edge=>{
+		sum += edge.weight;
 	});
-	console.log(out.join(' '));
-	return search;
+	console.log(sum);
 }
