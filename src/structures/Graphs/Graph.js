@@ -1,4 +1,4 @@
-function Graph(vertices, edges, options = {directed: false, weighted: false, baseWeight:1, multi: false, simple: true, onMultiEdge: null}) {
+function Graph(vertices, edges, options = {directed: false, weighted: false, baseWeight:1}) {
 	this.vertices = new Map();
 	this.edges = new Map();
 
@@ -6,17 +6,14 @@ function Graph(vertices, edges, options = {directed: false, weighted: false, bas
 	this.directed = options.directed;
 	this.baseWeight = options.baseWeight;
 
-	this.simple = options.simple;
-	this.onMultiEdge = options.onMultiEdge;
-
-
 	vertices.forEach( vertex => this.addVertex(vertex));
-	edges.forEach( edge => this.addEdge(edge));
+	edges.forEach( edge => this.addEdge(edge[0], edge[1], edge[2]));
 }
 
 var GraphMethods = {
 	addVertex(key, value) {
 		var vertex;
+
 		if(key instanceof Vertex) vertex = key;
 		else vertex = this.getVertex(key);
 		
@@ -29,22 +26,15 @@ var GraphMethods = {
 		return vertex;
 	},
 	addEdge(from, to, weight=this.baseWeight) {
-		if(from.length) 
-			[from, to, weight] = from
-
 		var fromVertex = this.getOrCreateVertex(from);
 		var toVertex = this.getOrCreateVertex(to);
-		
-		
-		if(!this.simple this.hasEdge(from, to) && this.onMultiEdge)
-			return this.onMultiEdge(fromVertex, toVertex, weight);
-		else 
-			return this._simpleAddEdge(fromVertex, toVertex, weight);
+		return this._simpleAddEdge(fromVertex, toVertex, weight);
+
 	},
 	_simpleAddEdge(from, to, weight) {
-		var edge = new Edge(fromVertex, toVertex, weight);
+		var edge = new Edge(from, to, weight);
 		this.getEdges(from).push(edge);
-		if(!this.directed) this.getEdges(to).push(edge);
+		if(!this.directed) this.getEdges(to).push(edge.reversed());
 	},
 
 	getOrCreateVertex(key, value) {
@@ -71,14 +61,17 @@ var GraphMethods = {
 		return this.vertices.get(getKey(v));
 	},
 
-	getEdges(from, to=null) {
+	getEdges(from) {
+		return this.edges.get(getKey(from));
+	},
+	getEdge(from, to=null) {
+		var edges = this.getEdges(from);
 
-		var edges = this.edges.get(getKey(from));
 		if (to) {
 			to = this.getVertex(to);
 			return edges.filter( edge =>  edge.to === to );
 		}
-		return edges;
+		return edges[0];
 	},
 
 	hasVertex(v) {
@@ -86,7 +79,7 @@ var GraphMethods = {
 	},
 	hasEdge(from, to) {
 		if(from.length) [from, to] = from;
-		return !!(this.getEdges(from, to).length);
+		return !!(this.getEdge(from, to));
 	},
 
 	toString() {

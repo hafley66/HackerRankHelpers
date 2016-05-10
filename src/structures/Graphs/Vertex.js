@@ -7,14 +7,8 @@ function Vertex(key, value, graph) {
 
 
 var vertexMethods = {
-	getEdges(to) { 
-		to = this.graph.getVertex(to);
-		
-		var t = [];
-		this.edges.forEach(edge => {
-			if(edge.to === to) t.push(edge);
-		});
-		return t; 
+	getEdge(to) { 
+		return this.graph.getEdge(this, to);
 	},
 	addEdge(to, weight=this.graph.baseWeight){
 		this.graph.addEdge(this, to, weight);
@@ -23,8 +17,8 @@ var vertexMethods = {
 		return this.graph.hasEdge(this, to);
 	},
 	getAdj() {
-		var vs = [];
-		return this.getAllEdges().map(edge=>edge.to).unique();
+		var toReturn = this.getAllEdges().map(edge=>edge.to).unique();
+		return toReturn;
 	},
 	getAllEdges() {
 		return this.graph.getEdges(this);

@@ -12,7 +12,11 @@ function getKey(obj) {
 Edge.prototype.toString = function dumbass() {
 	var {from, to, weight} = this;
 	return `<< ${from.key} --:${weight}:--> ${to.key} >>\n`;
-}
+};
+
+Edge.prototype.reversed = function() {
+	return new Edge(this.to, this.from, this.weight);
+};
 
 Array.prototype.remove = function(element) {
 	var index = this.indexOf(element)
@@ -77,7 +81,24 @@ function range(start, end) {
 }
 
 function mid(low, hi) {
-	return low + Math.floor(hi - low / 2);
+	return low + Math.floor( (hi - low) / 2);
+}
+
+function log() {
+	console.log.apply(console, arguments);
+}
+
+function intCompare(lhs, rhs){
+	if(lhs < rhs)
+		return -1;
+	else if(lhs > rhs)
+		return 1;
+	else 
+		return 0;
+}
+
+function asum(n) {
+	return (n * (n + 1)) / 2;
 }
 
 
