@@ -16,28 +16,18 @@ var vertexMethods = {
 		});
 		return t; 
 	},
-	addEdge(to, weight=this.graph.baseWeight, handshake=false){
-		var oldEdge = this.getEdges(to);
-		if(oldEdge.length) {
-			var theEdge = oldEdge[0];
-			if(theEdge.weight > weight){
-				theEdge.weight = weight;
-			}
-		} else {
-			var theEdge = new Edge(this, to, weight);
-			this.edges.append(theEdge);
-		}
-		if(!this.graph.directed && !handshake) to.addEdge(this, weight, true);
+	addEdge(to, weight=this.graph.baseWeight){
+		this.graph.addEdge(this, to, weight);
 	},
 	hasEdge(to) {
-		return this.getEdges(to).length;
+		return this.graph.hasEdge(this, to);
 	},
-	getAdjacentVertices() {
+	getAdj() {
 		var vs = [];
 		return this.getAllEdges().map(edge=>edge.to).unique();
 	},
 	getAllEdges() {
-		return this.edges.values();
+		return this.graph.getEdges(this);
 	},
 	getEdgeListString() {
 		if(this.edges.length){

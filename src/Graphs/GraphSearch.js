@@ -1,47 +1,73 @@
-function Prims(graph, source, target) {
-	source = graph.getVertex(source);
-	var parents = new Map();
-	var distances = new Map();
-	var intree = new Map();
-	
-	+function initialize() {
-		graph.vertices.forEach( v =>{
-			if(v !== source){
-				parents.set(v, null);
-				distances.set(v, Infinity);
-			} 
-			intree.set(v, false);
-		});
-	}();
+function DFS(G, source, F) {
+	var WHITE = 0;
+	var GRAY = 1;
+	var BLACK = 2;
+	var TIME = 0;
+	var V = G.getAllVertices();
+	var E = G.getAllEdges();
 
-	distances.set(source, 0);
-	var a = source;
+	initV(V);
+	DFS(G.getVertex(source));
 
-	while(a && !intree.get(a)) {
-		intree.set(a, true);
-		a.getAllEdges().forEach(e => {
-			var b = e.to;
-			if(!intree.get(b)){
-				var dist = e.weight;
-				if(dist < distances.get(b)) {
-					distances.set(b, dist);
-					parents.set(b, e);
-				}
-			}
-		});
-
-		var currDist = Infinity;
-		var bestVertex = null;
-		graph.getAllVertices().forEach(v=>{
-			if(!intree.get(v) && currDist > distances.get(v)) {
-				currDist = distances.get(v);
-				bestVertex = v;
-			}
-		});
-		a = bestVertex;
+	function enter(vertex) {
+		vertex.state = GRAY;
+		if(F.onEnter)
+			F.onEnter(vertex, TIME + 1, G);
+		vertex.time.enter = TIME++;
 	}
-	return {
-		distances, 
-		parents
+
+	function process(from, to) {
+		var edges = G.getEdges(from, to);
+		if(G.simple)
+			edges = edges[0];
+		if(F.onEdge) 
+			F.onEdge(edges, TIME, G);
 	}
+
+	function exit(vertex) {
+		vertex.state = BLACK;
+		if(F.onExit)
+			F.onExit(vertex, TIME + 1)
+		vertex.time.exit = TIME++;
+	}
+
+	function DFS(source) {
+		enter(source);
+
+		Adj(source).forEach(to => {
+			if(to.state === WHITE) {
+				to.parent = source;
+				process(source, to);
+				DGS(to);
+			} else if( ( to.state !== BLACK && source.parent !== to ) || G.directed ) {
+				process(source, to);
+			}
+			if(finished()) return;
+		});
+		
+		exit(source);
+	}
+
+	function initV(V) {
+		V.forEach(v=>{
+			v.time = {};
+			v.state = WHITE;
+		});
+	}
+
+
+	function Adj(vertex) {
+		if(F.Adj)
+			return F.Adj(vertex);
+		else
+			vertex.getAdj();
+	}
+
+	function finished() {
+		if(F.finished)
+			return F.finished();
+		else 
+			return false;
+	}
+
 }

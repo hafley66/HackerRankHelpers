@@ -9,6 +9,11 @@ function getKey(obj) {
 	return obj;
 }
 
+Edge.prototype.toString = function dumbass() {
+	var {from, to, weight} = this;
+	return `<< ${from.key} --:${weight}:--> ${to.key} >>\n`;
+}
+
 Array.prototype.remove = function(element) {
 	var index = this.indexOf(element)
 	if(index > -1) {
@@ -69,6 +74,10 @@ function range(start, end) {
 	}
 	
 	return r;
+}
+
+function mid(low, hi) {
+	return low + Math.floor(hi - low / 2);
 }
 
 
