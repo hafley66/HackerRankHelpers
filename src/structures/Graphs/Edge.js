@@ -65,6 +65,17 @@ Object.prototype.values = function() {
 
 }
 
+
+function intersection(ary0, ary1) {
+	var result = [];
+	var i = ary0.length;
+	while(i--) {
+		if(ary1.includes(ary0[i]))
+			result.push(ary0[i])
+	}
+	return result;
+}
+
 function isNil(obj) {
 	return obj === null || obj === undefined;
 }
