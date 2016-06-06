@@ -1,17 +1,5 @@
-<!-- <script src="./Graphs.js"></script> -->
-<script src="./src/Extras.js"></script>
-<script src="./src/structures/GraphRevised/Traversals/Base.js"></script> 
-<script src="./src/structures/GraphRevised/Traversals/StrongComponents.js"></script> 
-<script src="./src/structures/GraphRevised/Edge.js"></script> 
-<script src="./src/structures/GraphRevised/Vertex.js"></script>
-<script src="./src/structures/GraphRevised/Graph.js"></script>
-</script>
-
+<script src="jspm_packages/system.js"></script>
+<script src="config.js"></script>
 <script>
-	
-	var x= [[1,2],[2,5],[2,6],[2,3],[3,4],[4,3],[3,7],[4,8],[5,1], [5,6], [6,7], [7,6], [7, 8]];
-	var g = new DiGraph(null, x);
-	var scc = new SCC(g);
-	//scc.run();
-
+	System.import('src/main.js');
 </script>

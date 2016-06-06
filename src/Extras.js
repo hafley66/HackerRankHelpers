@@ -17,7 +17,6 @@ function StrictMap(map) {
 	return x;
 }
 
-
 function get(obj, path) {
 	if(!n(obj)){
 		var keys = path.split('.');
@@ -238,3 +237,7 @@ function keyMapShorthander(instance, mapAt, shorthandAt) {
 		return mapShorthand(map, k(obj), val);
 	}
 }
+
+export {
+	MultiMap, StrictMap, fill, invoke, get, asum, nil, range, isNil, un, n, key, mapShorthand, keyMapShorthander
+};
