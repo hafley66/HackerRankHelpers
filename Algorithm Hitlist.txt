@@ -1,0 +1,13 @@
+Algorithm Implementation Hitlist: 
+	Sorts
+	Graph Type Definitions
+	Max Flow
+	Corrected Graph Algorithms/Traversals
+	Strongly Connected Components
+	Connected Components
+	Topological Sort
+	Backtracking
+	Combinatorics
+	Dynamic Programming
+
+Algorithm Understanding Hitlist:

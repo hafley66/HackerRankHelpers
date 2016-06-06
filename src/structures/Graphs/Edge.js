@@ -2,11 +2,15 @@ function Edge(from, to, weight=1) {
 	this.from = from;
 	this.to = to;
 	this.weight = weight;
-}
+	this.G = from.G;
 
-function getKey(obj) {
-	if(obj && !isNil(obj.key)) return obj.key;
-	return obj;
+
+	var fromEdges = this.G.E(this.from);
+	var toEdges = this.G.E(this.to);
+	fromEdges[to.key] = this;
+	if(!this.G.directed){
+		toEdges[from.key] = this;
+	}
 }
 
 Edge.prototype.toString = function dumbass() {
@@ -18,103 +22,12 @@ Edge.prototype.reversed = function() {
 	return new Edge(this.to, this.from, this.weight);
 };
 
-Array.prototype.remove = function(element) {
-	var index = this.indexOf(element)
-	if(index > -1) {
-		return this.splice(index, 1);
-	}
-};
+Edge.prototype.equals = function(other) {
 
-Array.prototype.includes = function(element) {
-	var itDoes = false;
-	this.forEach(e=>{
-		if(e === element) 
-			itDoes = true;
-	});
-	return itDoes;
+	if(this === other || (this.from === other.from && this.to === other.to))
+		return true;
+	else if(!this.from.graph.directed 
+		&& (this.from === other.to && this.to === other.from))
+		return true;
+	return false;
 }
-
-Array.prototype.unique = function() {
-	var exists = new Map();
-	this.forEach(element => {
-		if(!exists.get(element))
-			exists.set(element, true);
-	});
-	return [...exists.keys()];
-}
-
-
-Object.prototype.sortKeys = function() {
-	var keys = Object.keys(this);
-	keys.sort();
-	var clone = {};
-	keys.forEach(v => {
-		clone[v] = this[v];
-	})
-	return clone;
-}
-Object.forEach = function(obj, iter) {
-
-	var keys = Object.keys(obj);
-	keys.forEach(key=>{
-		iter(obj[key], key, obj);
-	});
-}
-
-Object.prototype.values = function() {
-
-}
-
-
-function intersection(ary0, ary1) {
-	var result = [];
-	var i = ary0.length;
-	while(i--) {
-		if(ary1.includes(ary0[i]))
-			result.push(ary0[i])
-	}
-	return result;
-}
-
-function isNil(obj) {
-	return obj === null || obj === undefined;
-}
-
-function range(start, end) {
-	if(isNil(end)) [start, end] = [1, start];
-	var r = [];
-	
-	for (var i = start; i <= end; i++) { 
-		r.push(i); 
-	}
-	
-	return r;
-}
-
-function mid(low, hi) {
-	return low + Math.floor( (hi - low) / 2);
-}
-
-function log() {
-	console.log.apply(console, arguments);
-}
-
-function intCompare(lhs, rhs){
-	if(lhs < rhs)
-		return -1;
-	else if(lhs > rhs)
-		return 1;
-	else 
-		return 0;
-}
-
-function asum(n) {
-	return (n * (n + 1)) / 2;
-}
-
-
-Number.isInteger = Number.isInteger || function(value) {
-	return typeof value === "number" && 
-	isFinite(value) && 
-	Math.floor(value) === value;
-};

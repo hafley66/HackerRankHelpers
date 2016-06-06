@@ -106,14 +106,6 @@ var GraphMethods = {
 	}
 };
 
-function fill( n, e ) {
-	var x= [];
-	for(var i = 0; i < n; i++) 
-		x.push(e);
-	return x;
-
-}
-
 var C = {
 	W: 'white',
 	G: 'grey',
@@ -121,7 +113,3 @@ var C = {
 };
 
 Graph.prototype = Object.create(GraphMethods);
-
-// var g = new Graph(_.range(1, 5), [[1,2], [1,3]], {baseWeight: 6});
-// console.log(g +'');
-// console.log(BFS(g, 1));

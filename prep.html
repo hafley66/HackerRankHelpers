@@ -1,19 +1,17 @@
-<script src="./Graphs.js"></script>
-<script> 
-// processGraphData(`10 9
-// 2 1
-// 3 1
-// 4 3
-// 5 2
-// 6 1
-// 7 2
-// 8 6
-// 9 8
-// 10 8`)
+<!-- <script src="./Graphs.js"></script> -->
+<script src="./src/Extras.js"></script>
+<script src="./src/structures/GraphRevised/Traversals/Base.js"></script> 
+<script src="./src/structures/GraphRevised/Traversals/StrongComponents.js"></script> 
+<script src="./src/structures/GraphRevised/Edge.js"></script> 
+<script src="./src/structures/GraphRevised/Vertex.js"></script>
+<script src="./src/structures/GraphRevised/Graph.js"></script>
+</script>
 
-Clique(`10000
-35 152
-29 258
-45 566
-7 15`)
+<script>
+	
+	var x= [[1,2],[2,5],[2,6],[2,3],[3,4],[4,3],[3,7],[4,8],[5,1], [5,6], [6,7], [7,6], [7, 8]];
+	var g = new DiGraph(null, x);
+	var scc = new SCC(g);
+	//scc.run();
+
 </script>
