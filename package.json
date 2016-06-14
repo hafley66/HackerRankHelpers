@@ -2,11 +2,23 @@
   "jspm": {
     "dependencies": {
       "babel": "npm:babel-core@^5.8.24",
+      "babel-cli": "npm:babel-cli@^6.9.0",
+      "babel-plugin-lodash": "npm:babel-plugin-lodash@^3.1.5",
+      "babel-plugin-transform-es2015-modules-systemjs": "npm:babel-plugin-transform-es2015-modules-systemjs@^6.9.0",
+      "babel-preset-es2015": "npm:babel-preset-es2015@^6.9.0",
       "lodash": "npm:lodash@^4.13.1"
     },
     "devDependencies": {
       "babel-runtime": "npm:babel-runtime@^5.8.24",
       "core-js": "npm:core-js@^1.1.4"
     }
+  },
+  "dependencies": {
+    "babel-plugin-lodash": "^3.1.5",
+    "babel-plugin-transform-es2015-modules-systemjs": "^6.9.0",
+    "babel-preset-es2015": "^6.9.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.9.0"
   }
 }

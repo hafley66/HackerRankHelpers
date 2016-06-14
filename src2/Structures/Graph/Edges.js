@@ -1,17 +1,17 @@
 import {key as k, un} from 'Extras';
+
 export var Edge = (function Edge(){
 	function Edge(G, x, y, weight){
 		this._graph = G;
 		
-		if(un(weight)) this.weight(G? G.baseWeight : 1);
-		else this.weight(weight);
-
-		if(G){
-			[x, y] = [G.V(x), G.V(y)];
+		if(G)
+			this._registerWith(G, x, y, weight);
+		else {
 			this._v = [x, y];
-			this._registerWith(G, x, y);
+			this.source = x;
+			this.target = y;
+			this.weight(weight);
 		}
-		else this._v = [x, y];
 	}
 	var UEdgeMethods = {
 		V() {
@@ -29,6 +29,11 @@ export var Edge = (function Edge(){
 		except(v) {
 			return this.V().remove(v)[0];
 		},
+		orient(v) {
+			this.source = v;
+			this.target = this.except(v);
+			return this;
+		},
 		equals(other) {
 			var pair = other.V();
 			var tpair = this.V();
@@ -37,11 +42,20 @@ export var Edge = (function Edge(){
 		isBridge() {
 			return false;
 		},
-		_registerWith(G, x, y){
+		_registerWith(G, x, y, weight){
+			[ x, y ] = [ G.V(x), G.V(y) ];
 			var map = G.emap;
-			x = k(x); y = k(y);
-			map.get(x).set(y, this);
-			map.get(y).set(x, this);
+			var xk = k(x); 
+			var yk = k(y);
+			map.get(xk).set(yk, this);
+			if(!map.get(yk).has(xk))
+				map.get(yk).set(xk, this);
+
+
+			this._v = [x, y];
+			this.source = x;
+			this.target = y;
+			this.weight(weight);
 		},
 		weight(w) {
 			if(un(w)) return this._weight;
@@ -49,6 +63,12 @@ export var Edge = (function Edge(){
 		},
 		toString() {
 			return `{${this._v[0]}, ${this._v[1]}}\n`;
+		},
+		from() {
+			return this.source || this._v[0];
+		},
+		to() {
+			return this.target || this._v[1];
 		}
 	};
 
@@ -63,20 +83,21 @@ export var DiEdge = (function DiEdge() {
 	}
 
 	var EdgeMethods = {
-		_registerWith(G){
+		_registerWith(G, x, y, weight){
+			[x, y] = [G.V(x), G.V(y)];
+
 			var fMap = G.emap;
 			var tMap = G.emapTo;
-			var fk = k(this.from());
-			var tk = k(this.to());
+			var fk = k(x);
+			var tk = k(y);
 
 			fMap.get(fk).set(tk, this);
 			tMap.get(tk).set(fk, this);
-		},
-		from() {
-			return this._v[0];
-		},
-		to() {
-			return this._v[1];
+
+			this._v = [x, y];
+			this.source = x;
+			this.target = y;
+			this.weight(weight);
 		},
 		equals(other) {
 			return this.from() === other.from() && this.to() === other.to();
@@ -86,7 +107,10 @@ export var DiEdge = (function DiEdge() {
 		},
 		toString() {
 			return `(${this.from()}, ${this.to()})\n`;
-		}
+		},
+		from() {return this.source},
+		to() {return this.target},
+		orient(v){return this}
 	};
 	DiEdge.prototype = Object.create(Edge.prototype);
 	DiEdge.prototype.constructor = DiEdge;

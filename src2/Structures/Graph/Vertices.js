@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import {un, key as k, StrictMap} from 'Extras';
 
 export var Vertex = (function UndirecteDiVertex(){

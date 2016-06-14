@@ -1,6 +1,8 @@
+import {StrictMap} from 'Extras';
+
 function UnionFind() {
-	this.parent = new Map();
-	this.rank = new Map();
+	this.parent = new StrictMap();
+	this.rank = new StrictMap();
 }
 
 UnionFind.prototype.makeSet = function(x) {
@@ -33,3 +35,11 @@ UnionFind.prototype.find = function(x) {
 	return this.parent.get(x);
 }
 
+UnionFind.prototype.partitions = function() {
+	var map = new StrictMap();
+	for(var k of this.parent.keys())
+		map.set(k, this.find(k));
+	return map.invert();
+};
+
+export {UnionFind};
