@@ -35,22 +35,17 @@ var ContainerMethods = {
 };
 
 var OtherMethods = {
-	isFinished() {return false;},
-	hasCycle(edge) {
-		return !!this._cycles.length;
-	},
+	isFinished() {return false},
+	hasCycle(edge) {return !!this._cycles.length},
 	unexplored() {
-		return this.G.V().difference(this.explored(), this.discovered()).sortBy('key');
+		return this.G.V()
+		.difference(this.explored(), this.discovered())
+		.sortBy('key')
 	},
-	explored() {
-		return [...this._explored];
-	},
-	discovered() {
-		return [...this._discovered];
-	},
-	tree() {
-		return [...this._tree];
-	},
+	expanding() {return [...this._expanding]},
+	finished() {return [...this._finished]},
+	discovered() {return [...this._discovered]},
+	tree() {return [...this._tree]},
 	cycles() {return [...this._cycles]},
 	trees() {return [...this._trees]}
 };
